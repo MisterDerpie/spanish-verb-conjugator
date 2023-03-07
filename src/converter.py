@@ -1,6 +1,4 @@
-from conjugation_table import VerbConjugation
 from typing import Dict, List, Optional
-import json
 
 
 # https://github.com/MisterDerpie/anki-deck-creator

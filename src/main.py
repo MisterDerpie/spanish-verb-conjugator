@@ -5,7 +5,11 @@ from cache import JsonFileCache
 import json
 
 cache = JsonFileCache("verbs")
-verb_list = ["ser", "ir", "visitar", "comer", "jugar", "saber", "ver"]
+verb_list = [
+    "ser",
+    "ir",
+    "visitar",
+]
 verbs = [VerbFetcher.get_verb_cache(verb, cache) for verb in verb_list]
 
 _filter = {
