@@ -5,6 +5,7 @@ import requests
 
 from bs4 import BeautifulSoup
 from typing import Dict, List
+from cache import Cache
 
 
 class TimeGroup:
@@ -151,4 +152,14 @@ class VerbFetcher:
             verb_soup.is_regular(),
             verb_soup.get_timetables(),
         )
+        return conjugation
+
+    @staticmethod
+    def get_verb_cache(verb: str, cache: Cache) -> Dict:
+        if cache.is_present(verb):
+            return cache.read(verb)
+
+        conjugation = VerbFetcher.get_verb(verb).to_dict()
+        cache.write(verb, conjugation)
+
         return conjugation

@@ -1,10 +1,12 @@
 #!/bin/python3
 from conjugation_table import VerbFetcher
 from converter import AnkiDeckCreatorVocabularyConverter
+from cache import JsonFileCache
 import json
 
+cache = JsonFileCache("verbs")
 verb_list = ["ser", "ir", "visitar", "comer", "jugar", "saber", "ver"]
-verbs = [VerbFetcher.get_verb(verb).to_dict() for verb in verb_list]
+verbs = [VerbFetcher.get_verb_cache(verb, cache) for verb in verb_list]
 
 _filter = {
     "Indicativo": [
