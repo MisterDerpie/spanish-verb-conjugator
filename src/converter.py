@@ -7,15 +7,26 @@ import json
 class AnkiDeckCreatorVocabularyConverter:
     _filter: Optional[Dict]
     _verb_conjugation: Dict
+    _ignore_regular: bool
 
-    def __init__(self, verb_conjugation: Dict, _filter: Optional[Dict]):
+    def __init__(
+        self,
+        verb_conjugation: Dict,
+        _filter: Optional[Dict],
+        ignore_regular: bool = True,
+    ):
         self._verb_conjugation = verb_conjugation
         self._filter = _filter
+        self._ignore_regular = ignore_regular
 
     def convert(self) -> Dict[str, str]:
         vocabulary = []
         from_english = self._verb_conjugation["translation"]
         to_spanish = self._verb_conjugation["verb"]
+
+        if self._ignore_regular and self._verb_conjugation["regular"]:
+            return [self._build_regular(from_english, to_spanish)]
+
         conjugations = self._verb_conjugation["conjugations"]
         for conjugation in conjugations:
             group = conjugation["group"]
@@ -39,6 +50,9 @@ class AnkiDeckCreatorVocabularyConverter:
 
     def _build_to(self, verb: str, conjugations: List[str]) -> str:
         return f"{verb}<br/><br/>" + "<br/>".join(conjugations)
+
+    def _build_regular(self, translation_from: str, translation_to: str):
+        return {"english": translation_from, "spanish": translation_to}
 
     def _append_vocabulary(
         self,
