@@ -106,13 +106,25 @@ print(verb.to_json())
 ### Cached Retrieval
 
 The cache interface is defined in `cache.py`.
-In addition, there is a local filesystem JSON Cache implemented as an example
+
+#### JSON File Cache
 
 ```python
 from conjugation_table import VerbFetcher
-from cache import JsonFileCache
+from json_file_cache import JsonFileCache
 
 cache = JsonFileCache("verbs")            # Has to be a directory
+VerbFetcher.get_verb_cache("ser", cache)  # Writes verb if absent
+VerbFetcher.get_verb_cache("ser", cache)  # Read should be I/O bound fast
+```
+
+#### SQLite3 File Cache
+
+```python
+from conjugation_table import VerbFetcher
+from sqlite_cache import SqliteCache
+
+cache = SqliteCache("verbs.db")           # Has to be a directory
 VerbFetcher.get_verb_cache("ser", cache)  # Writes verb if absent
 VerbFetcher.get_verb_cache("ser", cache)  # Read should be I/O bound fast
 ```
