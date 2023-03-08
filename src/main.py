@@ -1,10 +1,10 @@
 #!/bin/python3
 from conjugation_table import VerbFetcher
 from converter import AnkiDeckCreatorVocabularyConverter
-from cache import JsonFileCache
+from sqlite_cache import SqliteCache
 import json
 
-cache = JsonFileCache("verbs")
+cache = SqliteCache("verbs.db")
 verb_list = [
     "ser",
     "ir",
