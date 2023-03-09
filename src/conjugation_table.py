@@ -37,11 +37,12 @@ class BeautifulSoupConjugation:
 
     def get_translation(self) -> str:
         result = re.findall(
-            """<a href="\/ingles\/verbo\/.*?\.php">(.*?)<\/a><br\/>""",
+            """<a href="\/ingles\/verbo\/.*?\.php">(.*?)<\/a>""",
             self.html,
         )
         if len(result) != 1:
             logging.warn(f"Expected one result for translation, found: {result}")
+            return f"{self.verb} - NO TRANSLATION FOUND"
         return result[0]
 
     def get_timetables(self) -> Dict[str, List]:

@@ -8,9 +8,21 @@ cache = SqliteCache("verbs.db")
 verb_list = [
     "ser",
     "ir",
-    "visitar",
+    "estar",
+    "poder",
+    "haber",
+    "saber",
+    "trabajar",
+    "comer",
+    "vivir",
 ]
-verbs = [VerbFetcher.get_verb_cache(verb, cache) for verb in verb_list]
+
+verbs = []
+for word in verb_list:
+    lcword = word.lower()
+    print(f"Processing {lcword}")
+    result = VerbFetcher.get_verb_cache(lcword, cache)
+    verbs.append(result)
 
 _filter = {
     "Indicativo": [

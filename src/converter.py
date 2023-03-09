@@ -1,5 +1,8 @@
 from typing import Dict, List, Optional
 
+SPECIAL_TRANSLATION_LIST = ["ser", "estar", "ir"]
+MANUAL_TRANSLATIONS = {"poder": "können/dürfen"}
+
 
 # https://github.com/MisterDerpie/anki-deck-creator
 class AnkiDeckCreatorVocabularyConverter:
@@ -43,14 +46,21 @@ class AnkiDeckCreatorVocabularyConverter:
 
         return vocabulary
 
-    def _build_from(self, verb_native: str, group: str, tense: str) -> str:
-        return f"{verb_native} - {group}, {tense}"
+    def _build_from(
+        self, verb_native: str, group: str, tense: str, verb_not_native: str = ""
+    ) -> str:
+        verb_from = verb_native
+        if verb_not_native in MANUAL_TRANSLATIONS.keys():
+            verb_from = MANUAL_TRANSLATIONS[verb_not_native]
+        if verb_not_native in SPECIAL_TRANSLATION_LIST:
+            return f"{verb_from} - {group}, {tense} ({verb_not_native})"
+        return f"{verb_from} - {group}, {tense}"
 
     def _build_to(self, verb: str, conjugations: List[str]) -> str:
         return f"{verb}<br/><br/>" + "<br/>".join(conjugations)
 
     def _build_regular(self, translation_from: str, translation_to: str):
-        return {"english": translation_from, "spanish": translation_to}
+        return {"english": f"{translation_from} (regular)", "spanish": translation_to}
 
     def _append_vocabulary(
         self,
@@ -61,6 +71,8 @@ class AnkiDeckCreatorVocabularyConverter:
         tense: str,
         conjugations,
     ) -> None:
-        translation_from = self._build_from(english, group, tense)
+        translation_from = self._build_from(english, group, tense, spanish)
         translation_to = self._build_to(spanish, conjugations)
-        vocabulary.append({"english": translation_from, "spanish": translation_to})
+        vocabulary.append(
+            {"english": f"{translation_from} (irregular)", "spanish": translation_to}
+        )
